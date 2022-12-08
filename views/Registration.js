@@ -81,7 +81,7 @@ const Registration = ({ navigation }) => {
 
   const onLogin = (data) => {
     console.log(data);
-    navigation.navigate('New Password Entry');
+    navigation.navigate('New Entry');
     //TO DO
     //Add error check --> api call to login --> navigate to home upon success
   };
