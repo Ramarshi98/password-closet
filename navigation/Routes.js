@@ -1,4 +1,4 @@
-import { DefaultTheme, NavigationContainer, useNavigation } from '@react-navigation/native';
+import { DrawerActions , useNavigation } from '@react-navigation/native';
 // import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StyleSheet } from 'react-native';
@@ -54,7 +54,7 @@ const Routes = () => {
               style={{ marginLeft: 10 }}
               name="menu"
               size={35}
-              onPress={() => alert('add navigation') }
+              onPress={() => navigation.dispatch(DrawerActions.openDrawer()) }
             />
           ),
           headerRight: () => (
@@ -62,7 +62,7 @@ const Routes = () => {
               style={{ marginRight: 10 }}
               name="add"
               size={35}
-              onPress={() => alert('setup go to new entry')}
+              onPress={() => navigation.navigate('New Entry')}
             />
           ),
           headerTitleStyle: styles.headerTitleStyle,
