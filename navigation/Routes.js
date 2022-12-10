@@ -1,6 +1,5 @@
-import { DrawerActions , useNavigation } from '@react-navigation/native';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet } from 'react-native';
 
 import NewEntry from '../views/NewEntry';
@@ -9,11 +8,12 @@ import Home from '../views/Home';
 import { Icon } from '@rneui/themed';
 import { primaryColor } from '../GlobalVariables';
 
-import Drawer from './Drawer';
+// import Drawer from './Drawer';
+import Profile from '../views/Profile';
 
 const Routes = () => {
 
-  const { Screen, Navigator } = createDrawerNavigator();
+  const { Screen, Navigator } = createNativeStackNavigator();
   const navigation = useNavigation();
 
   return (
@@ -21,19 +21,41 @@ const Routes = () => {
       initialRouteName="My Closet"
       screenOptions={{
         headerShown: true,
-        headerShadowVisible: false,
-        drawerLabelStyle: { marginLeft: -15, fontSize: 18},
-        drawerActiveBackgroundColor: primaryColor,
-        drawerActiveTintColor: 'black'
+        headerShadowVisible: false
+        // drawerLabelStyle: { marginLeft: -15, fontSize: 18},
+        // drawerActiveBackgroundColor: primaryColor,
+        // drawerActiveTintColor: 'black'
       }}
-      drawerContent={(props) => <Drawer {...props} />}
+      // drawerContent={(props) => <Drawer {...props} />}
     >
       <Screen
         name="New Entry"
         component={NewEntry}
         options={{
           headerTitleStyle: styles.headerTitleStyle,
-          drawerIcon: () => <Icon name="add" />,
+          // drawerIcon: () => <Icon name="add" />,
+          // headerLeft: () => (
+          //   <Icon
+          //     name="chevron-left"
+          //     size={35}
+          //     onPress={() => navigation.goBack() }
+          //   />
+          // )
+        }}
+      />
+      <Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerTitleStyle: styles.headerTitleStyle
+          // drawerIcon: () => <Icon name="add" />,
+          // headerLeft: () => (
+          //   <Icon
+          //     name="chevron-left"
+          //     size={35}
+          //     onPress={() => navigation.goBack() }
+          //   />
+          // )
         }}
       />
       <Screen
@@ -41,25 +63,21 @@ const Routes = () => {
         component={Registration}
         options={{
           headerTitleStyle: styles.headerTitleStyle,
-          drawerIcon: () => <Icon name="login" />,
         }}
       />
       <Screen
         name="My Closet"
         component={Home}
         options={{
-          drawerIcon: () => <Icon name="home" />,
           headerLeft: () => (
             <Icon
-              style={{ marginLeft: 10 }}
-              name="menu"
+              name="person"
               size={35}
-              onPress={() => navigation.dispatch(DrawerActions.openDrawer()) }
+              onPress={() => navigation.navigate('Profile') }
             />
           ),
           headerRight: () => (
             <Icon
-              style={{ marginRight: 10 }}
               name="add"
               size={35}
               onPress={() => navigation.navigate('New Entry')}
