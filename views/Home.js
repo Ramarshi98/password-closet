@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
-import { ListItem, Button, SearchBar, Icon } from '@rneui/themed';
+import { ListItem, SearchBar } from '@rneui/themed';
 
 import { useState, useEffect } from 'react';
 
