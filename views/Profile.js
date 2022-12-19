@@ -8,7 +8,7 @@ import { primaryColor, primaryFontFamily } from '../GlobalVariables';
 const userProfileData = [
   {
     IconName: 'email',
-    value: 'test@email.com',
+    value: 'test@email.com', //from API Call
   },
   {
     IconName: 'lock',

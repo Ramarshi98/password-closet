@@ -59,6 +59,13 @@ const signUpFormArraySetPassword = [
     defaultValue: '',
     secureTextEntry: true,
   },
+  {
+    id: 'confirmPassword',
+    type: 'textbox',
+    label: 'Re-enter your above set password',
+    defaultValue: '',
+    secureTextEntry: true
+  }
 ];
 
 const Registration = ({ navigation }) => {
@@ -98,8 +105,13 @@ const Registration = ({ navigation }) => {
     setOnDisplayArray(signUpFormArraySetPassword);
   };
 
-  const onSignUp = () => {
+  const onSignUp = (data) => {
     //backend logic to sign the user up.
+    if (data.newPassword !== data.confirmPassword) {
+      alert('Your passwords do not match!');
+    } else {
+      alert('Password matched!')
+    }
   };
 
   return (
