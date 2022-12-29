@@ -8,8 +8,9 @@ import axios from 'axios';
 
 
 const Home = ({ navigation }) => {
-  const [passwordEntryList, setPasswordEntryList] = useState();
   const [search, setSearch] = useState('');
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [masterDataSource, setMasterDataSource] = useState([]);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -20,7 +21,8 @@ const Home = ({ navigation }) => {
             'app-id': '638a51ead5f6176cb6309248',
           },
         });
-        setPasswordEntryList(res.data.data);
+        setMasterDataSource(res.data.data);
+        setFilteredDataSource(res.data.data); //for filter functionality to work
       } catch (err) {
         console.log('error: ' + err);
       }
@@ -29,8 +31,27 @@ const Home = ({ navigation }) => {
     fetchEntries();
   }, []);
 
-  const updateSearch = (search) => {
-    setSearch(search);
+  const updateSearch = (text) => {
+    // Check if searched text is not blank
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource and update FilteredDataSource
+      const newData = masterDataSource.filter(function (item) {
+        // Applying filter for the inserted text in search bar
+        const itemData = item.firstName
+          ? item.firstName.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
+    }
   };
 
   const SingleItem = ({ item }) => {
@@ -40,7 +61,12 @@ const Home = ({ navigation }) => {
         topDivider
         containerStyle={styles.listItemStyle}
         onLongPress={() => alert('delete?')}
-        onPress={() => alert('success')}
+        onPress={() => {
+          /* 1. Navigate to the Details route with params */
+          navigation.navigate('Update Entry', {
+            itemId: item.id
+          });
+        }}
       >
         <ListItem.Content>
           <ListItem.Title>{item.firstName}</ListItem.Title>
@@ -51,7 +77,7 @@ const Home = ({ navigation }) => {
 
   return (
     <SafeAreaView>
-      {passwordEntryList ? (
+      {masterDataSource ? (
         <View style={styles.listContainerStyle}>
           <View style={styles.searchBarSectionStyle}>
             <SearchBar
@@ -62,7 +88,7 @@ const Home = ({ navigation }) => {
             />
           </View>
           <FlatList
-            data={passwordEntryList}
+            data={filteredDataSource}
             renderItem={SingleItem}
             keyExtractor={(item) => item.id}
           />

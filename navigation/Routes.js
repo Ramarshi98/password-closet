@@ -2,14 +2,16 @@ import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet } from 'react-native';
 
-import NewEntry from '../views/NewEntry';
-import Registration from '../views/Registration';
-import Home from '../views/Home';
 import { Icon } from '@rneui/themed';
 import { primaryColor } from '../GlobalVariables';
 
 // import Drawer from './Drawer';
+import NewEntry from '../views/NewEntry';
+import Registration from '../views/Registration';
+import Home from '../views/Home';
 import Profile from '../views/Profile';
+import UpdateEntry from '../views/UpdateEntry';
+
 
 const Routes = () => {
 
@@ -44,18 +46,17 @@ const Routes = () => {
         }}
       />
       <Screen
+        name="Update Entry"
+        component={UpdateEntry}
+        options={{
+          headerTitleStyle: styles.headerTitleStyle
+        }}
+      />
+      <Screen
         name="Profile"
         component={Profile}
         options={{
           headerTitleStyle: styles.headerTitleStyle
-          // drawerIcon: () => <Icon name="add" />,
-          // headerLeft: () => (
-          //   <Icon
-          //     name="chevron-left"
-          //     size={35}
-          //     onPress={() => navigation.goBack() }
-          //   />
-          // )
         }}
       />
       <Screen

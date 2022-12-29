@@ -1,6 +1,6 @@
-import { Avatar, Icon, ListItem, Switch } from '@rneui/themed';
+import { Avatar, Button, Icon, ListItem, Switch } from '@rneui/themed';
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Linking } from 'react-native';
 import { primaryColor, primaryFontFamily } from '../GlobalVariables';
 
 // Email, password
@@ -43,6 +43,10 @@ const Profile = ({ navigation }) => {
     );
   };
 
+  const editProfileHandler = async () => {
+    //TO DO
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.topThird}>
@@ -62,9 +66,16 @@ const Profile = ({ navigation }) => {
             keyExtractor={(item) => item.IconName}
           />
         </View>
-        <View style={styles.switchViewStyle}>
-          <Text style={styles.switchTextStyle}>Use Phone Security for login</Text>
-          <Switch value={isEnabled} onValueChange={(value) => toggleHandler(value)} />
+        <View style={{ flex: 2.4 }}>
+          <View style={styles.switchViewStyle}>
+            <Text style={styles.switchTextStyle}>Use Phone Security for login</Text>
+            <Switch value={isEnabled} onValueChange={(value) => toggleHandler(value)} />
+          </View>
+          <Button
+            buttonStyle={{ borderRadius: 30, padding: 20, marginTop: 80 }}
+            title="Edit Profile"
+            onPress={editProfileHandler}
+          />
         </View>
       </View>
     </View>
@@ -86,6 +97,7 @@ const styles = StyleSheet.create({
     flex: 4,
     alignItems: 'center',
     flexDirection: 'column',
+    justifyContent: 'flex-end',
   },
   UserNameStyle: {
     fontSize: 30,
@@ -107,7 +119,6 @@ const styles = StyleSheet.create({
   },
   switchViewStyle: {
     flexDirection: 'row',
-    flex: 2.4,
   },
   switchTextStyle: {
     marginTop: 5,
