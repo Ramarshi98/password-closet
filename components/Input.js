@@ -2,9 +2,20 @@ import { View, StyleSheet, Text, TextInput } from 'react-native';
 import { Controller, useFormContext } from 'react-hook-form';
 
 const Input = (props) => {
-
-  const {formState: {errors}} = useFormContext();
-  const { placeholder, type, label, id, secureTextEntry, defaultValue, required, control } = props;
+  const {
+    formState: { errors },
+  } = useFormContext();
+  const {
+    placeholder,
+    type,
+    label,
+    id,
+    secureTextEntry,
+    defaultValue,
+    required,
+    control,
+    editable,
+  } = props;
 
   return (
     <View style={styles.container}>
@@ -20,16 +31,18 @@ const Input = (props) => {
             required: {
               value: required,
               message: `${label} is required`,
-            }
+            },
           }}
           render={({ field: { value, onChange } }) => (
             <TextInput
               placeholder={placeholder}
-              style={styles.textInputStyle}
+              style={editable === false ? styles.textInputDisabledStyle : styles.textInputStyle}
               multiline={type === 'textarea' ? true : false}
               value={value}
               onChangeText={(value) => onChange(value)}
               secureTextEntry={secureTextEntry === true ? true : false}
+              editable={editable}
+              selectTextOnFocus={false}
             />
           )}
         />
@@ -55,6 +68,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 10,
     height: 50,
+    backgroundColor: 'white',
   },
   textAreaBox: {
     borderWidth: 1,
@@ -64,14 +78,20 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 10,
     borderRadius: 10,
+    backgroundColor: 'white',
   },
   textInputStyle: {
     flex: 1,
     fontSize: 15,
   },
+  textInputDisabledStyle: {
+    flex: 1,
+    fontSize: 15,
+    color: 'grey',
+  },
   errorTextStyle: {
-    color:'red'
-  }
+    color: 'red',
+  },
 });
 
 export default Input;

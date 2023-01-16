@@ -64,7 +64,10 @@ const Home = ({ navigation }) => {
         onPress={() => {
           /* 1. Navigate to the Details route with params */
           navigation.navigate('Update Entry', {
-            itemId: item.id
+            itemId: item.id,
+            pageTitle: item.firstName,
+            password: item.lastName,
+            notes: item.title
           });
         }}
       >
