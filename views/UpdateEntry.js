@@ -3,7 +3,11 @@ import { Button } from '@rneui/themed';
 import { useEffect, useState } from 'react';
 import Input from '../components/Input';
 import { useForm, FormProvider } from 'react-hook-form';
+import axios from 'axios';
+import { BACKEND_URL, ENTRY_ENDPOINT, TEST_API_KEY } from '../Env';
 
+// When Backend is Done:
+//Edit onSubmit function after editing Env file.
 
 const UpdateEntry = ({ route, navigation }) => {
   const { itemId, pageTitle, password, notes } = route.params;
@@ -51,8 +55,25 @@ const UpdateEntry = ({ route, navigation }) => {
     setEditable(true);
   };
 
-  const onSubmit = (data) => {
-    console.log(itemId);
+  const onSubmit = async (data) => {
+    try {
+      console.log(BACKEND_URL + ENTRY_ENDPOINT + itemId);
+      let updatedUser = await axios.put(BACKEND_URL + ENTRY_ENDPOINT + itemId, {
+        headers: {
+          'app-id': TEST_API_KEY,
+        },
+        data: {
+          firstName: data.pageTitle,
+          lastName: data.password,
+          title: data.notes
+        },
+      });
+      console.log(updatedUser);
+      alert('Sucessfully Updated!');
+    } catch (err) {
+      console.log(err);
+      alert('Updated failed! Try again later.');
+    }
   };
 
   return (

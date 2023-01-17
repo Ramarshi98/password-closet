@@ -3,7 +3,7 @@ import { ListItem, SearchBar } from '@rneui/themed';
 
 import { useState, useEffect } from 'react';
 
-import { BACKEND_URL } from '../Env';
+import { BACKEND_URL, TEST_API_KEY } from '../Env';
 import axios from 'axios';
 
 
@@ -18,7 +18,7 @@ const Home = ({ navigation }) => {
       try {
         res = await axios.get(BACKEND_URL + '/user?page=1&limit=20', {
           headers: {
-            'app-id': '638a51ead5f6176cb6309248',
+            'app-id': TEST_API_KEY,
           },
         });
         setMasterDataSource(res.data.data);

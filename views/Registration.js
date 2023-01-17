@@ -69,11 +69,12 @@ const signUpFormArraySetPassword = [
 ];
 
 const Registration = ({ navigation }) => {
+  const formMethods = useForm();
   useEffect(() => {
+    formMethods.reset();
     setOnDisplayArray(loginFormArray);
   }, []);
 
-  const formMethods = useForm();
   const [onDisplayArray, setOnDisplayArray] = useState([]);
 
   const switchToLogin = () => {
@@ -107,7 +108,7 @@ const Registration = ({ navigation }) => {
 
   const onSignUp = (data) => {
     //backend logic to sign the user up.
-    if (data.newPassword !== data.confirmPassword) {
+    if (!data.newPassword || (data.newPassword !== data.confirmPassword)) {
       alert('Your passwords do not match!');
     } else {
       alert('Password matched!')
