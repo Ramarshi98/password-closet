@@ -6,28 +6,34 @@ import { useState, useEffect } from 'react';
 import { BACKEND_URL, TEST_API_KEY } from '../Env';
 import axios from 'axios';
 
-
 const Home = ({ navigation }) => {
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
 
-  useEffect(() => {
-    const fetchEntries = async () => {
-      let res;
-      try {
-        res = await axios.get(BACKEND_URL + '/user?page=1&limit=20', {
-          headers: {
-            'app-id': TEST_API_KEY,
-          },
-        });
-        setMasterDataSource(res.data.data);
-        setFilteredDataSource(res.data.data); //for filter functionality to work
-      } catch (err) {
-        console.log('error: ' + err);
-      }
-    };
+  const fetchEntries = async () => {
+    let res;
+    try {
+      res = await axios.get(BACKEND_URL + '/user?page=1&limit=20', {
+        headers: {
+          'app-id': TEST_API_KEY,
+        },
+      });
+      setMasterDataSource(res.data.data);
+      setFilteredDataSource(res.data.data); //for filter functionality to work
+    } catch (err) {
+      console.log('error: ' + err);
+    }
+  };
 
+  useEffect(() => {
+    const fetchEntriesOnNavigate = navigation.addListener('focus', () => {
+      fetchEntries();
+    });
+    return fetchEntriesOnNavigate;
+  }, [navigation]);
+
+  useEffect(() => {
     fetchEntries();
   }, []);
 
@@ -38,9 +44,7 @@ const Home = ({ navigation }) => {
       // Filter the masterDataSource and update FilteredDataSource
       const newData = masterDataSource.filter(function (item) {
         // Applying filter for the inserted text in search bar
-        const itemData = item.firstName
-          ? item.firstName.toUpperCase()
-          : ''.toUpperCase();
+        const itemData = item.firstName ? item.firstName.toUpperCase() : ''.toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
@@ -67,7 +71,7 @@ const Home = ({ navigation }) => {
             itemId: item.id,
             pageTitle: item.firstName,
             password: item.lastName,
-            notes: item.title
+            notes: item.title,
           });
         }}
       >
@@ -114,8 +118,8 @@ const styles = StyleSheet.create({
     marginBottom: 120,
   },
   searchBarSectionStyle: {
-    flexDirection: 'row'
-  }
+    flexDirection: 'row',
+  },
 });
 
 export default Home;

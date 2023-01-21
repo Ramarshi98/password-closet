@@ -3,8 +3,12 @@ import { Button } from '@rneui/themed';
 import { useEffect, useState } from 'react';
 import Input from '../components/Input';
 import { useForm, FormProvider } from 'react-hook-form';
+
+// import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import { BACKEND_URL, ENTRY_ENDPOINT, TEST_API_KEY } from '../Env';
+import { PasswordEntrySchema } from '../utility/database/PasswordEntrySchema';
+
 
 // When Backend is Done:
 //Edit onSubmit function after editing Env file.
@@ -14,6 +18,7 @@ const UpdateEntry = ({ route, navigation }) => {
   const formMethods = useForm();
 
   const [editable, setEditable] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formArray = [
     {
@@ -56,23 +61,31 @@ const UpdateEntry = ({ route, navigation }) => {
   };
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
-      console.log(BACKEND_URL + ENTRY_ENDPOINT + itemId);
-      let updatedUser = await axios.put(BACKEND_URL + ENTRY_ENDPOINT + itemId, {
-        headers: {
-          'app-id': TEST_API_KEY,
-        },
-        data: {
-          firstName: data.pageTitle,
-          lastName: data.password,
-          title: data.notes
-        },
-      });
-      console.log(updatedUser);
-      alert('Sucessfully Updated!');
+      // let updatedUser = await axios({
+      //   method: 'put',
+      //   url: BACKEND_URL + ENTRY_ENDPOINT + itemId,
+      //   headers: {
+      //     'app-id': TEST_API_KEY
+      //   },
+      //   data: {
+      //     firstName: data.pageTitle,
+      //     lastName: data.password,
+      //     title: data.notes
+      //   }
+      // });
+      // await SecureStore.setItemAsync('pageTitle', data.pageTitle);
+      // alert('Sucessfully Updated!');
+      setIsLoading(false);
+      setEditable(false);
+      let res = await SecureStore.getItemAsync('pageTitle');
+      console.log(res);
     } catch (err) {
       console.log(err);
       alert('Updated failed! Try again later.');
+      setIsLoading(false);
+      setEditable(false);
     }
   };
 
@@ -98,8 +111,21 @@ const UpdateEntry = ({ route, navigation }) => {
               />
             );
           })}
-          {!editable && <Button title="Update Entry" buttonStyle={styles.updateButtonStyle} onPress={handleUpdateButton} />}
-          {editable && <Button title="Confirm Update" buttonStyle={styles.confirmButtonStyle} onPress={formMethods.handleSubmit(onSubmit)} />}
+          {!editable && (
+            <Button
+              title="Update Entry"
+              buttonStyle={styles.updateButtonStyle}
+              onPress={handleUpdateButton}
+            />
+          )}
+          {editable && (
+            <Button
+              title="Confirm Update"
+              buttonStyle={styles.confirmButtonStyle}
+              onPress={formMethods.handleSubmit(onSubmit)}
+              loading={isLoading}
+            />
+          )}
         </FormProvider>
       </View>
     </View>
@@ -122,19 +148,19 @@ const styles = StyleSheet.create({
     marginTop: 80,
     alignItems: 'center',
   },
-  confirmButtonStyle : {
+  confirmButtonStyle: {
     backgroundColor: 'green',
     padding: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    marginTop: 35
+    marginTop: 35,
   },
   updateButtonStyle: {
     padding: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    marginTop: 35
-  }
+    marginTop: 35,
+  },
 });
 
 export default UpdateEntry;
