@@ -2,6 +2,8 @@ import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
 import Input from '../components/Input';
 import { useForm, FormProvider } from 'react-hook-form';
 
+import axios from 'axios';
+
 const formArray = [
   {
     id: 'pageTitle',
@@ -38,8 +40,24 @@ const NewEntry = ({ navigation }) => {
 
   const formMethods = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    let res;
+    try {
+      res = await fetch('https://4ca7-207-38-131-243.ngrok.io/api/users/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.pageTitle,
+          email: data.password
+        })
+      });
+      console.log(res.json());
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
