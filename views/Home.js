@@ -14,7 +14,8 @@ const Home = ({ navigation }) => {
   const fetchEntries = async () => {
     let res;
     try {
-      res = await axios.get(BACKEND_URL + '/user?page=1&limit=20', {
+      // change this from axios to fetch then yarn remove fetch. and change the url to backend url once async storage is ready.
+      res = await axios.get('https://dummyapi.io/data/v1' + '/user?page=1&limit=20', {
         headers: {
           'app-id': TEST_API_KEY,
         },

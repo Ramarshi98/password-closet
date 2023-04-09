@@ -1,4 +1,4 @@
-export const BACKEND_URL =  'https://dummyapi.io/data/v1';
+export const BACKEND_URL =  'https://passwordcloset-backend.vercel.app';
 export const ENTRY_ENDPOINT = '/user/';
 
 export const TEST_API_KEY = '638a51ead5f6176cb6309248';

@@ -1,8 +1,11 @@
-import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
+import { View, StyleSheet, Text, TextInput } from 'react-native';
+import { useState } from 'react';
 import Input from '../components/Input';
 import { useForm, FormProvider } from 'react-hook-form';
+import { Button } from '@rneui/themed';
 
 import axios from 'axios';
+import { BACKEND_URL } from '../Env';
 
 const formArray = [
   {
@@ -39,24 +42,31 @@ const NewEntry = ({ navigation }) => {
   // } = useForm();
 
   const formMethods = useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data) => {
     console.log(data);
+    setIsLoading(true);
     let res;
     try {
-      res = await fetch('https://4ca7-207-38-131-243.ngrok.io/api/users/user', {
+      res = await fetch(BACKEND_URL + '/api/users/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: data.pageTitle,
-          email: data.password
+          email: data.password,
+          isVerified: false
         })
       });
-      console.log(res.json());
+      alert('Success!');
+      setIsLoading(false);
+      navigation.goBack();
     } catch (err) {
       console.log(err);
+      alert('Please try again later!');
+      setIsLoading(false);
     }
   };
 
@@ -81,7 +91,12 @@ const NewEntry = ({ navigation }) => {
               />
             );
           })}
-          <Button title="Add Entry" onPress={formMethods.handleSubmit(onSubmit)} />
+          <Button
+            buttonStyle={styles.addButtonStyle}
+            title="Add Entry"
+            onPress={formMethods.handleSubmit(onSubmit)}
+            loading={isLoading}
+          />
         </FormProvider>
       </View>
     </View>
@@ -104,6 +119,12 @@ const styles = StyleSheet.create({
     marginTop: 80,
     alignItems: 'center',
   },
+  addButtonStyle: {
+    padding: 15,
+    paddingHorizontal: 50,
+    borderRadius: 20,
+    marginTop: 35,
+  }
 });
 
 export default NewEntry;

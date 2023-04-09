@@ -20,7 +20,7 @@ const Routes = () => {
 
   return (
     <Navigator
-      initialRouteName="My Closet"
+      initialRouteName="Authenticate"
       screenOptions={{
         headerShown: true,
         headerShadowVisible: false

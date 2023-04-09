@@ -4,6 +4,8 @@ import { useForm, FormProvider } from 'react-hook-form';
 import Input from '../components/Input';
 import { useState, useEffect } from 'react';
 
+import { BACKEND_URL } from '../Env';
+
 const loginFormArray = [
   {
     id: 'loginEmail',
@@ -64,8 +66,8 @@ const signUpFormArraySetPassword = [
     type: 'textbox',
     label: 'Re-enter your above set password',
     defaultValue: '',
-    secureTextEntry: true
-  }
+    secureTextEntry: true,
+  },
 ];
 
 const Registration = ({ navigation }) => {
@@ -94,8 +96,28 @@ const Registration = ({ navigation }) => {
     //Add error check --> api call to login --> navigate to home upon success
   };
 
-  const emailVerificationHandler = () => {
+  const emailVerificationHandler = async (data) => {
     //Add connection to backend here //sending email to backend for code send to email
+    console.log(data);
+    let res;
+    try {
+      res = await fetch(BACKEND_URL + '/api/users/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.fullName,
+          email: data.signUpEmail,
+          isVerified: false,
+        }),
+      });
+      alert('Success!');
+      // navigation.goBack();
+    } catch (err) {
+      console.log(err);
+      alert('Please try again later!');
+    }
     formMethods.reset();
     setOnDisplayArray(signUpFormArrayVerificationCode);
   };
@@ -108,10 +130,10 @@ const Registration = ({ navigation }) => {
 
   const onSignUp = (data) => {
     //backend logic to sign the user up.
-    if (!data.newPassword || (data.newPassword !== data.confirmPassword)) {
+    if (!data.newPassword || data.newPassword !== data.confirmPassword) {
       alert('Your passwords do not match!');
     } else {
-      alert('Password matched!')
+      alert('Password matched!');
     }
   };
 
@@ -163,10 +185,13 @@ const Registration = ({ navigation }) => {
             </View>
           )}
           {onDisplayArray === signUpFormArrayVerificationCode && (
-            <Button
-              title="Verify Code"
-              onPress={formMethods.handleSubmit(verificationCodeHandler)}
-            />
+            <View>
+              <Button
+                title="Verify Code"
+                onPress={formMethods.handleSubmit(verificationCodeHandler)}
+              />
+              <Button title="Restart" onPress={formMethods.handleSubmit(switchToSignUp)} />
+            </View>
           )}
           {onDisplayArray === signUpFormArraySetPassword && (
             <Button title="Finish Sign Up" onPress={formMethods.handleSubmit(onSignUp)} />
